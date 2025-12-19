@@ -6,8 +6,8 @@ import java.sql.Timestamp
 
 @Entity
 data class Note(
-    @PrimaryKey val id: Int?= null,
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val title: String,
-    val content : String,
+    val content: String,
     val timestamp: Long
 )

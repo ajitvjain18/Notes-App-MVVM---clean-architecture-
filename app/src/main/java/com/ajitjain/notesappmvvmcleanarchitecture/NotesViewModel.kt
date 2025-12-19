@@ -30,7 +30,8 @@ class NotesViewModel @Inject constructor(
     val selectedNote = _selectedNote.asStateFlow()
 
     init {
-        fetchNotes()
+//        insertDummyNotes()
+//        fetchNotes()
     }
 
     private fun fetchNotes() {
@@ -56,6 +57,22 @@ class NotesViewModel @Inject constructor(
     fun deleteNote(note: Note) {
         viewModelScope.launch {
             deleteNoteUseCase(note)
+        }
+    }
+
+    fun insertDummyNotes() {
+        viewModelScope.launch {
+            val currentTime = System.currentTimeMillis()
+
+            repeat(10) { index ->
+                val note = Note(
+                    title = "Dummy Note ${index + 1}",
+                    content = "This is dummy content for note ${index + 1}",
+                    timestamp = currentTime + index
+                )
+
+                insertNoteUseCase(note) // 👈 one-by-one insert
+            }
         }
     }
 

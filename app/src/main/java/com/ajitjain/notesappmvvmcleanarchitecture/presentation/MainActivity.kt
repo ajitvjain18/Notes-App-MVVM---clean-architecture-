@@ -1,47 +1,45 @@
 package com.ajitjain.notesappmvvmcleanarchitecture.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.ajitjain.notesappmvvmcleanarchitecture.NotesViewModel
 import com.ajitjain.notesappmvvmcleanarchitecture.ui.theme.NotesAppMVVMCleanArchitectureTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             NotesAppMVVMCleanArchitectureTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                val viewModel: NotesViewModel = hiltViewModel()
+                NotesScreen(viewModel)
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NotesAppMVVMCleanArchitectureTheme {
-        Greeting("Android")
+    @Composable
+    fun NotesScreen(
+        viewModel: NotesViewModel
+    ) {
+        val notes by viewModel.notes.collectAsState()
+        Log.d("ajit",notes.size.toString())
+        LazyColumn {
+            items(notes) { note ->
+                Text(text = note.title)
+            }
+        }
     }
 }
