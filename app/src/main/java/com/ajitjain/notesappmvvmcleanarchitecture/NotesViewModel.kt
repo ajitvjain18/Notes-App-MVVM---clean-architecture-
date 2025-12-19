@@ -1,6 +1,5 @@
 package com.ajitjain.notesappmvvmcleanarchitecture
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ajitjain.notesappmvvmcleanarchitecture.domain.model.Note
@@ -30,8 +29,7 @@ class NotesViewModel @Inject constructor(
     val selectedNote = _selectedNote.asStateFlow()
 
     init {
-//        insertDummyNotes()
-//        fetchNotes()
+        fetchNotes()
     }
 
     private fun fetchNotes() {
@@ -60,20 +58,5 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun insertDummyNotes() {
-        viewModelScope.launch {
-            val currentTime = System.currentTimeMillis()
-
-            repeat(10) { index ->
-                val note = Note(
-                    title = "Dummy Note ${index + 1}",
-                    content = "This is dummy content for note ${index + 1}",
-                    timestamp = currentTime + index
-                )
-
-                insertNoteUseCase(note) // 👈 one-by-one insert
-            }
-        }
-    }
 
 }
